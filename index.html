@@ -113,36 +113,166 @@
 </head>
 <body>
     <div class="banner">
-        <p style="text-align:center; font-size:small;"><em><b>Disclaimer:</b> This content is for research and educational purposes only and is not intended and should not be construed as financial advice. Please do your own research before taking an financial decisions.</em><br><br>
+        <p style="text-align:center; font-size:small;"><em><b>Disclaimer:</b> This content is for research and educational purposes only and is not intended and should not be construed as financial advice. Please do your own research before taking any financial decisions.</em><br><br>
         <em style="font-size:medium;">Back Of The</em>
         <h1>Envelope</h1>
-        </p>        
-    </div>
+            <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tape.js"></script>
 
+        <tv-ticker-tape symbols='FOREXCOM:SPXUSD,FOREXCOM:NSXUSD,FOREXCOM:DJI,FX:EURUSD,BITSTAMP:BTCUSD,BITSTAMP:ETHUSD,CMCMARKETS:GOLD,FX_IDC:USDINR,FOREXCOM:USDJPY,NSE:NIFTY' item-size="compact" show-hover></tv-ticker-tape>
+            </script>
+        </p>
+    </div>
+    
     <div class="container">
         <div class="tab-buttons" role="tablist">
-            <button class="tab-button" data-tab="about" role="tab" aria-selected="false">About</button>
+            <button class="tab-button" data-tab="Tracker" role="tab" aria-selected="false">Tracker</button>
             <button class="tab-button active" data-tab="T2026" role="tab" aria-selected="true">2026 Trends</button>
             <button class="tab-button" data-tab="Der" role="tab" aria-selected="false">Derivatives</button>
             <button class="tab-button" data-tab="Comm" role="tab" aria-selected="false">Commodities Supercycle</button>
             <button class="tab-button" data-tab="Lend" role="tab" aria-selected="false">Lending</button>
             <button class="tab-button" data-tab="Phrm" role="tab" aria-selected="false">Pharmaceuticals</button>
             <button class="tab-button" data-tab="ORM" role="tab" aria-selected="false">Oil Refining & Marketing</button>
+            <button class="tab-button" data-tab="about" role="tab" aria-selected="false">About</button>
             <!-- Duplicate the line above to add more tabs, e.g.:
             <button class="tab-button" data-tab="new-tab-id" role="tab" aria-selected="false">New Tab Label</button>
             -->
         </div>
 
-        <div class="tab-content">
-            <div id="about" class="tab-panel" role="tabpanel">
-                <h1>About Me</h1>
-                <p>Publishing my research for the purpose of education, peer review, and discourse. You can reach out to me at:</p>
-                <ul><strong>Email: </strong>internetfail123456@gmail.com</ul>
-                <ul>On X (formerly known as Twitter) <a href="https://x.com/BearAGrins" target="_blank" rel="noopener noreferrer"><img src="new-twitter-x-logo-twitter-icon-x-social-media-icon-free-png.png"></a></ul>
-                <ul>On Youtube<a href="https://www.youtube.com/@OnlyBackoftheEnvelope" target="_blank" rel="noopener noreferrer"><img src="youtube.png"></a></ul>
-                <ul><a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/1" target="_blank" rel="noopener noreferrer"><b>Github discussions</b></a></ul>
+            <div id="Tracker" class="tab-panel" role="tabpanel">
+                <iframe 
+                src="https://docs.google.com/spreadsheets/d/e/2PACX-.../pubhtml?range=B2:H15&gid=123456789&single=true&widget=true&headers=false&chrome=false" 
+                width="54%" 
+                height="450" 
+                style="border:none; border-radius:8px;"
+                frameborder="0">
+                </iframe>
+
+                <h2>Other Assets</h2>
+                <!-- TradingView Widget BEGIN -->
+                <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/markets/" rel="noopener nofollow" target="_blank"><span class="blue-text">Market summary</span></a><span class="trademark"> by TradingView</span></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
+                {
+                "colorTheme": "dark",
+                "locale": "en",
+                "largeChartUrl": "",
+                "isTransparent": false,
+                "showSymbolLogo": true,
+                "backgroundColor": "#0F0F0F",
+                "support_host": "https://www.tradingview.com",
+                "width": 800,
+                "height": 1000,
+                "symbolsGroups": [
+                    {
+                    "name": "Indices",
+                    "symbols": [
+                        {
+                        "name": "FOREXCOM:SPXUSD",
+                        "displayName": "S&P 500 Index"
+                        },
+                        {
+                        "name": "FOREXCOM:NSXUSD",
+                        "displayName": "US 100 Cash CFD"
+                        },
+                        {
+                        "name": "FOREXCOM:DJI",
+                        "displayName": "Dow Jones Industrial Average Index"
+                        },
+                        {
+                        "name": "INDEX:NKY",
+                        "displayName": "Japan 225"
+                        },
+                        {
+                        "name": "INDEX:DEU40",
+                        "displayName": "DAX Index"
+                        },
+                        {
+                        "name": "FOREXCOM:UKXGBP",
+                        "displayName": "FTSE 100 Index"
+                        }
+                    ]
+                    },
+                    {
+                    "name": "Futures",
+                    "symbols": [
+                        {
+                        "name": "BMFBOVESPA:ISP1!",
+                        "displayName": "S&P 500"
+                        },
+                        {
+                        "name": "BMFBOVESPA:EUR1!",
+                        "displayName": "Euro"
+                        },
+                        {
+                        "name": "CMCMARKETS:GOLD",
+                        "displayName": "Gold"
+                        },
+                        {
+                        "name": "PYTH:WTI3!",
+                        "displayName": "WTI Crude Oil"
+                        },
+                        {
+                        "name": "BMFBOVESPA:CCM1!",
+                        "displayName": "Corn"
+                        }
+                    ]
+                    },
+                    {
+                    "name": "Bonds",
+                    "symbols": [
+                        {
+                        "name": "EUREX:FGBL1!",
+                        "displayName": "Euro Bund"
+                        },
+                        {
+                        "name": "EUREX:FBTP1!",
+                        "displayName": "Euro BTP"
+                        },
+                        {
+                        "name": "EUREX:FGBM1!",
+                        "displayName": "Euro BOBL"
+                        }
+                    ]
+                    },
+                    {
+                    "name": "Forex",
+                    "symbols": [
+                        {
+                        "name": "FX:EURUSD",
+                        "displayName": "EUR to USD"
+                        },
+                        {
+                        "name": "FX:GBPUSD",
+                        "displayName": "GBP to USD"
+                        },
+                        {
+                        "name": "FX:USDJPY",
+                        "displayName": "USD to JPY"
+                        },
+                        {
+                        "name": "FX:USDCHF",
+                        "displayName": "USD to CHF"
+                        },
+                        {
+                        "name": "FX:AUDUSD",
+                        "displayName": "AUD to USD"
+                        },
+                        {
+                        "name": "FX:USDCAD",
+                        "displayName": "USD to CAD"
+                        }
+                    ]
+                    }
+                ]
+                }
+                </script>
+                </div>
+                <!-- TradingView Widget END -->
+
             </div>
 
+        <div class="tab-content">
             <div id="T2026" class="tab-panel active" role="tabpanel">
                 <h1>Top Trends to watch out for in 2026</h1><br>
                 <a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/2" target="_blank" rel="noopener noreferrer"><b>Discussions</b></a>
@@ -412,6 +542,16 @@
                 
                 </p>
             </div>
+
+            <div id="about" class="tab-panel" role="tabpanel">
+                <h1>About Me</h1>
+                <p>Publishing my research for the purpose of education, peer review, and discourse. You can reach out to me at:</p>
+                <ul><strong>Email: </strong>internetfail123456@gmail.com</ul>
+                <ul>On X (formerly known as Twitter) <a href="https://x.com/BearAGrins" target="_blank" rel="noopener noreferrer"><img src="new-twitter-x-logo-twitter-icon-x-social-media-icon-free-png.png"></a></ul>
+                <ul>On Youtube<a href="https://www.youtube.com/@OnlyBackoftheEnvelope" target="_blank" rel="noopener noreferrer"><img src="youtube.png"></a></ul>
+                <ul><a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/1" target="_blank" rel="noopener noreferrer"><b>Github discussions</b></a></ul>
+            </div>
+
 
             <!-- To add a new tab, duplicate a panel like this:
             <div id="new-tab-id" class="tab-panel" role="tabpanel">
