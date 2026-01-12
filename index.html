@@ -57,8 +57,6 @@
             flex-wrap: wrap;
         }
         .tab-content {
-            padding: 30px;
-            min-height: 400px;
             flex-wrap: wrap;
         }
         .tab-panel {
@@ -126,7 +124,8 @@
     <div class="container">
         <div class="tab-buttons" role="tablist">
             <button class="tab-button" data-tab="Tracker" role="tab" aria-selected="false">Tracker</button>
-            <button class="tab-button active" data-tab="T2026" role="tab" aria-selected="true">2026 Trends</button>
+            <button class="tab-button active" data-tab="Union Budget 2026" role="tab" aria-selected="true">Union Budget 2026</button>
+            <button class="tab-button" data-tab="T2026" role="tab" aria-selected="false">2026 Trends</button>
             <button class="tab-button" data-tab="Der" role="tab" aria-selected="false">Derivatives</button>
             <button class="tab-button" data-tab="Comm" role="tab" aria-selected="false">Commodities Supercycle</button>
             <button class="tab-button" data-tab="Lend" role="tab" aria-selected="false">Lending</button>
@@ -137,9 +136,10 @@
             <button class="tab-button" data-tab="new-tab-id" role="tab" aria-selected="false">New Tab Label</button>
             -->
         </div>
-            <div class="tab-content">
-                <div id="Tracker" class="tab-panel" role="tabpanel">
-                    <p><em style="font-size:small">Best viewed on desktop browser</em></p>
+
+        <div class="tab-content"></div>
+            <div id="Tracker" class="tab-panel" role="tabpanel">
+                <em>This page is best viewed on a desktop.</em>
                     <!-- TradingView Widget BEGIN -->
                     <div class="tradingview-widget-container">
                     <div class="tradingview-widget-container__widget"></div>
@@ -286,10 +286,47 @@
                         </script>
                         </div>
                         <!-- TradingView Widget END -->
-
+                </div>
             </div>
+            
+            <div id="Union Budget 2026" class="tab-panel active" role="tabpanel">
+                <h1><strong>Union budget FY2026</strong></h1>
 
-            <div id="T2026" class="tab-panel active" role="tabpanel">
+                <p>Estimated sources and value of revenue -<br> 
+                    <img src="BudgetSources .png"></img>
+                <em>(Values in lk.cr.) <br> 
+                
+                Above is an AI-generated estimate of ~35-39lk.cr. Expected to be collected in FY26 (Impact of GST reforms on reduced collections) baked in above. Source: Grok</em><br>
+
+                Revenue is expected to be flat, ongoing stabilization of direct and indirect taxation is expected. Forecast of the union budget to be presented on 1st Feb’26. Source: Grok
+                </p><img src="BudgetSpending.png"></img>
+                    <em>(Values in lk.cr.)</em></p>
+
+                <p>Below are some points to consider with the above budget forecast based on Viksit Bharat (Make in India), Consumption stimulus, and Welfare priorities: <br>
+                    <ul>1. <strong>Debt control</strong> - Interest payouts continue to remain 30%+ of total budget. This may continue as loans mature over an extended period of time corroded by inflation. This will also be inline with fiscal deficit (4-4.3%) and inflation (2-2.5%) targets factoring in 100bps rate cuts through the year, and expected GDP growth rate of 8%.</ul>
+                    <ul>2. <strong>Road, Transport, Highways, Railways</strong> will continue to remain a priority to drive consumption. However, due to reducing collections, and demand for income, capital gains tax reduction, the allocation may remain flat (or 5%+), and focus on completion of existing infra projects may intensify.</ul>
+                    <ul>3. <a href=https://www.ey.com/en_in/newsroom/2026/01/ey-india-expects-union-budget-2026-to-prioritize-growth-continuity-tax-certainty-and-sector-led-investment > <b style="color:yellowgreen">This EY report</b></a> calls for digitization and simplification of BOE and other documentation for customs, and toll across trade hubs transfers to improve tax compliance and coverage including reforms for IFSCs. Adjacent defense spending may also continue in-line, like naval investments which may have synergies infra-synergies</ul>
+                    <ul>4. <strong>Subsidies</strong> (MNREGA already being repackaged) may come with reductions.</ul>
+                    <ul>5. While overall transfers to state may increase to drive top-down implementation of rural and <strong>SME/MSME programs</strong>; subsidy rationalization may result in commensurate reduction in allocation to ~7-8%</ul>
+                    <ul>6. <strong>Export incentives</strong> to supplement US tariffs on capital goods, textile, etc. industries, and budget allocation to compensate for import rebate waivers from China and similar policies globally to promote profitability in these industries, including EMS imports</ul>
+                    <ul>7. While investment for data-centers and other AI themes (like electronics, chips, energy, etc.) may be required, it may be partially funded through PLI schemes and partially by encouraging FDI to also facilitate knowledge transfer.</ul>
+                </p>
+                
+                <footer><em style="font-size:small"> 
+                    <p><b>Sources:</b></p> 
+                        <ul><a href="https://www.indiabudget.gov.in/doc/eb/stat3a.pdf" style="color: greenyellow;">Ministry of finance 25-26, Full Document</a></ul>  
+                        <ul><a href="https://www.indiabudget.gov.in/doc/Budget_at_Glance/bag3.pdf" style="color: greenyellow;">Budget at a Glance</a></ul>  
+                        <ul><a href="https://www.indiabudget.gov.in/doc/rec/allrec.pdf" style="color: greenyellow;">Receipt Budget</a></ul>  
+                        <ul><a href="https://www.indiabudget.gov.in/doc/eb/vol1.pdf" style="color: greenyellow;">Expenditure Budget</a></ul>
+                        <ul><a href="https://cga.nic.in" style="color: greenyellow;">CGA Monthly Accounts</a></ul>
+                        <ul><a href="https://www.ey.com/en_in/newsroom/2026/01/ey-india-expects-union-budget-2026-to-prioritize-growth-continuity-tax-certainty-and-sector-led-investment" style="color: greenyellow;">EY Report on Budget expectations</a></ul>  
+                        <ul><a href="https://www.nipfp.org.in/publications/working-papers" style="color: greenyellow;"></a></ul>                        
+                        <ul><a href="https://www.rbi.org.in/Scripts/AnnualPublications.aspx?head=Handbook%20of%20Statistics%20on%20Indian%20States" style="color: greenyellow;">RBI</a></ul>
+                        </em>
+                    </footer>
+            </div>
+        
+            <div id="T2026" class="tab-panel" role="tabpanel">
                 <h1>Top Trends to watch out for in 2026</h1><br>
                 <a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/2" target="_blank" rel="noopener noreferrer"><b>Discussions</b></a>
 
