@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back of the Envelope</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: black;
+            color: white;
+        }
+        .banner {
+            max-width: 175ch;
+            height: auto;
+            margin: 0;
+            background: black;
+            overflow: hidden;
+            text-align: center;
+            font-size: 40px;
+            padding: 30px 20px;
+        }
+        .container {
+            max-width: 175ch;
+            margin: 0 auto;
+            background: black;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .tab-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab-button {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            flex: 1 1 120px;
+            text-align: center;
+        }
+        .tab-button:hover {
+            background: #ddd;
+        }
+        .tab-button.active {
+            background: white;
+            border-bottom: 3px solid green;
+            font-weight: bold;
+            flex-wrap: wrap;
+        }
+        .tab-content {
+            flex-wrap: wrap;
+        }
+        .tab-panel {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            flex-wrap: wrap;
+        }
+        
+        .tab-panel.active {
+            display: block;
+            flex-wrap: wrap;
+            animation: fadeSlideIn 0.35s ease forwards;
+        }
+        h1, h2 {
+            color: whitesmoke;
+        }
+
+        .tab-panel img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin: 15px 0;
+        display: block;
+        }
+    
+        .sub-tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .sub-tab-button {
+            background: none;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 2px solid transparent;
+            color: #aaa;
+            font-size: clamp(0.9rem, 1.1vw, 1rem);
+            font-weight: 500;
+        }
+
+        .sub-tab-button.active {
+            color: #fff;
+            border-bottom-color: #4ea1ff;
+            font-size: 1.05em;
+            font-weight: 700;
+        }
+
+
+        .sub-tab-button:hover {
+            background: darkcyan;
+        }
+
+
+        .sub-tab-content {
+            flex-wrap: wrap;
+        }
+
+        .sub-tab-panel {
+            display: none;
+            opacity: 0;
+            transform: translateY(8px);
+            flex-wrap: wrap;
+        }
+
+        .sub-tab-panel.active {
+            display: block;
+            flex-wrap: wrap;
+            animation: fadeSlideIn 0.25s ease forwards;
+        }
+
+        h1, h2 {
+            color: whitesmoke;
+        }
+
+
+        .sub-tab-panel img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin: 15px 0;
+        display: block;
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        justify-content: right;
+        }
+        
+        .image-gallery img {
+        flex: 1 1 300px;
+        max-width: 45%;
+        }
+
+        .inline-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin-right: 12px;
+        vertical-align: middle;
+        object-fit: cover; /* Ensures image fills the space nicely if cropped */
+        }
+
+        .small-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+        vertical-align: middle;
+        }
+
+            @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+                }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: flex-end; /* RIGHT ALIGN */
+            gap: 0.75rem;
+        }
+
+        .share-buttons button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #f2f2f2;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .share-buttons button:hover {
+            transform: translateY(-2px);
+            background: #e0e0e0;
+        }
+
+        .share-buttons svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+        }
+
+        /* Brand colors on hover */
+        button[data-share="whatsapp"]:hover svg { fill: #25D366; }
+        button[data-share="twitter"]:hover svg  { fill: #000; }
+        button[data-share="linkedin"]:hover svg { fill: #0A66C2; }
+        button[data-share="facebook"]:hover svg { fill: #1877F2; }
+
+        .tv-center-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .iframe-container {
+            display: flex;
+            justify-content: center; /* Centers horizontally */
+            height: 50vh;           /* Takes up full viewport height for perfect centering on page */
+        }
+
+
+
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="banner">
+            <p style="text-align:center; font-size:small;"><em><b>Disclaimer:</b> This content is for research and educational purposes only and is not intended and should not be construed as financial advice. Please do your own research before taking any financial decisions.</em><br><br>
+            <em style="font-size:medium;">Back Of The</em>
+            <h1>Envelope</h1>
+                <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tape.js"></script>
+    
+            <tv-ticker-tape symbols='FOREXCOM:SPXUSD,FOREXCOM:NSXUSD,FOREXCOM:DJI,FX:EURUSD,BITSTAMP:BTCUSD,BITSTAMP:ETHUSD,CMCMARKETS:GOLD,FX_IDC:USDINR,FOREXCOM:USDJPY,NSE:NIFTY' item-size="compact" show-hover></tv-ticker-tape>
+                </script>
+            </p>
+        </div>
+        
+        <div class="tab-buttons" role="tablist">
+            <button class="tab-button" data-tab="Tracker" role="tab" aria-selected="false">Tracker</button>
+            <button class="tab-button active" data-tab="Current Affairs" role="tab" aria-selected="true">Current Affairs</button>
+            <button class="tab-button" data-tab="Opinion" role="tab" aria-selected="false">Opinion</button>
+            <button class="tab-button" data-tab="about" role="tab" aria-selected="false">About</button>
+            <!-- Duplicate the line above to add more tabs, e.g.:
+            <button class="tab-button" data-tab="new-tab-id" role="tab" aria-selected="false">New Tab Label</button>
+            -->
+        </div>
+
+            <div id="Tracker" class="tab-panel" role="tabpanel">
+                <!--share buttons-->
+            <div class="share-buttons" aria-label="Share this section">
+                <button data-share="whatsapp" aria-label="Share on WhatsApp">
+                    <svg viewBox="0 0 32 32" aria-hidden="true">
+                    <path d="M19.11 17.66c-.27-.14-1.58-.78-1.83-.87-.25-.09-.43-.14-.61.14-.18.27-.7.87-.86 1.05-.16.18-.32.2-.59.07-.27-.14-1.14-.42-2.18-1.35-.81-.72-1.36-1.6-1.52-1.87-.16-.27-.02-.42.12-.56.13-.13.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.02-.22-.53-.45-.46-.61-.47l-.52-.01c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3s.99 2.68 1.13 2.86c.14.18 1.95 2.98 4.73 4.18.66.28 1.18.45 1.58.58.66.21 1.26.18 1.73.11.53-.08 1.58-.64 1.8-1.26.22-.61.22-1.13.16-1.26-.05-.13-.2-.2-.43-.34z"/>
+                    <path d="M16 3C9.38 3 4 8.38 4 15c0 2.64.86 5.08 2.31 7.05L4 29l7.19-2.29A11.94 11.94 0 0016 27c6.62 0 12-5.38 12-12S22.62 3 16 3z"/>
+                    </svg>
+                </button>
+
+                <button data-share="twitter" aria-label="Share on X">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18.9 2H22l-6.76 7.73L23 22h-6.2l-4.86-6.3L6.6 22H2l7.23-8.26L1 2h6.3l4.4 5.72L18.9 2z"/>
+                    </svg>
+                </button>
+
+                <button data-share="linkedin" aria-label="Share on LinkedIn">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v16H0V8zm7.98 0h4.8v2.18h.07c.67-1.27 2.3-2.6 4.74-2.6 5.07 0 6.01 3.34 6.01 7.68V24h-5V16.2c0-1.86-.03-4.25-2.59-4.25-2.6 0-3 2.02-3 4.11V24h-5V8z"/>
+                    </svg>
+                </button>
+
+                <button data-share="facebook" aria-label="Share on Facebook">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22 12a10 10 0 10-11.5 9.95v-7.04H8.08V12h2.42V9.8c0-2.39 1.42-3.7 3.6-3.7 1.04 0 2.13.18 2.13.18v2.35h-1.2c-1.18 0-1.55.73-1.55 1.48V12h2.64l-.42 2.91h-2.22v7.04A10 10 0 0022 12z"/>
+                    </svg>
+                </button>
+            
+                <button data-share="copy" aria-label="Copy link">📋</button>
+                <button onclick="navigator.share?.({ url: location.href })">📤</button>
+            
+            </div>
+
+            
+
+                <b>This page is best viewed on a desktop.</b><br>
+                    <div class="iframe-container">
+                    <iframe 
+                    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTz6XnpUFP8Yp-bqZ3WzktonuCbE3f9IC3wt-FkKkN5_T3-LOvYM6Djz4LEaN94zdKscdEkArjRkyKU/pubhtml?range=A1:I16&gid=0&amp;single=true&amp;widget=true&amp;headers=false"
+                    height="435"
+                    width="54%">
+                    </iframe></div>
+
+                    <h2>Other Assets</h2>
+                        <!-- TradingView Widget BEGIN -->
+                    <div class="tv-center-wrapper">
+                        <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/markets/" rel="noopener nofollow" target="_blank"><span class="blue-text">Market summary</span></a><span class="trademark"> by TradingView</span></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
+                        {
+                        "colorTheme": "dark",
+                        "locale": "en",
+                        "largeChartUrl": "",
+                        "isTransparent": false,
+                        "showSymbolLogo": true,
+                        "backgroundColor": "#0F0F0F",
+                        "support_host": "https://www.tradingview.com",
+                        "width": 800,
+                        "height": 1000,
+                        "symbolsGroups": [
+                            {
+                            "name": "Indices",
+                            "symbols": [
+                                {
+                                "name": "FOREXCOM:SPXUSD",
+                                "displayName": "S&P 500 Index"
+                                },
+                                {
+                                "name": "FOREXCOM:NSXUSD",
+                                "displayName": "US 100 Cash CFD"
+                                },
+                                {
+                                "name": "FOREXCOM:DJI",
+                                "displayName": "Dow Jones Industrial Average Index"
+                                },
+                                {
+                                "name": "INDEX:NKY",
+                                "displayName": "Japan 225"
+                                },
+                                {
+                                "name": "INDEX:DEU40",
+                                "displayName": "DAX Index"
+                                },
+                                {
+                                "name": "FOREXCOM:UKXGBP",
+                                "displayName": "FTSE 100 Index"
+                                }
+                            ]
+                            },
+                            {
+                            "name": "Futures",
+                            "symbols": [
+                                {
+                                "name": "BMFBOVESPA:ISP1!",
+                                "displayName": "S&P 500"
+                                },
+                                {
+                                "name": "BMFBOVESPA:EUR1!",
+                                "displayName": "Euro"
+                                },
+                                {
+                                "name": "CMCMARKETS:GOLD",
+                                "displayName": "Gold"
+                                },
+                                {
+                                "name": "PYTH:WTI3!",
+                                "displayName": "WTI Crude Oil"
+                                },
+                                {
+                                "name": "BMFBOVESPA:CCM1!",
+                                "displayName": "Corn"
+                                }
+                            ]
+                            },
+                            {
+                            "name": "Bonds",
+                            "symbols": [
+                                {
+                                "name": "EUREX:FGBL1!",
+                                "displayName": "Euro Bund"
+                                },
+                                {
+                                "name": "EUREX:FBTP1!",
+                                "displayName": "Euro BTP"
+                                },
+                                {
+                                "name": "EUREX:FGBM1!",
+                                "displayName": "Euro BOBL"
+                                }
+                            ]
+                            },
+                            {
+                            "name": "Forex",
+                            "symbols": [
+                                {
+                                "name": "FX:EURUSD",
+                                "displayName": "EUR to USD"
+                                },
+                                {
+                                "name": "FX:GBPUSD",
+                                "displayName": "GBP to USD"
+                                },
+                                {
+                                "name": "FX:USDJPY",
+                                "displayName": "USD to JPY"
+                                },
+                                {
+                                "name": "FX:USDCHF",
+                                "displayName": "USD to CHF"
+                                },
+                                {
+                                "name": "FX:AUDUSD",
+                                "displayName": "AUD to USD"
+                                },
+                                {
+                                "name": "FX:USDCAD",
+                                "displayName": "USD to CAD"
+                                }
+                            ]
+                            }
+                        ]
+                        }
+                        </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                        </div>
+                        </div>
+                    </div>
+
+            
+            <div id="Current Affairs" class="tab-panel active" role="tabpanel"><br>
+                <div class="sub-tab-buttons">
+                    <button class="sub-tab-button active" data-sub-tab="UB2026" role="sub-tab" aria-selected="true">Union Budget 2026</button>
+                    <button class="sub-tab-button" data-sub-tab="T2026" role="sub-tab" aria-selected="false">2026 Trends</button>
+                    <button class="sub-tab-button" data-sub-tab="Comm" role="sub-tab" aria-selected="false">Commodities Supercycle</button>
+                    <button class="sub-tab-button" data-sub-tab="Lend" role="sub-tab" aria-selected="false">Lending</button>
+                </div>
+                                    <!--share buttons-->
+                                <div class="share-buttons" aria-label="Share this section">
+                                    <button data-share="whatsapp" aria-label="Share on WhatsApp">
+                                        <svg viewBox="0 0 32 32" aria-hidden="true">
+                                        <path d="M19.11 17.66c-.27-.14-1.58-.78-1.83-.87-.25-.09-.43-.14-.61.14-.18.27-.7.87-.86 1.05-.16.18-.32.2-.59.07-.27-.14-1.14-.42-2.18-1.35-.81-.72-1.36-1.6-1.52-1.87-.16-.27-.02-.42.12-.56.13-.13.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.02-.22-.53-.45-.46-.61-.47l-.52-.01c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3s.99 2.68 1.13 2.86c.14.18 1.95 2.98 4.73 4.18.66.28 1.18.45 1.58.58.66.21 1.26.18 1.73.11.53-.08 1.58-.64 1.8-1.26.22-.61.22-1.13.16-1.26-.05-.13-.2-.2-.43-.34z"/>
+                                        <path d="M16 3C9.38 3 4 8.38 4 15c0 2.64.86 5.08 2.31 7.05L4 29l7.19-2.29A11.94 11.94 0 0016 27c6.62 0 12-5.38 12-12S22.62 3 16 3z"/>
+                                        </svg>
+                                    </button>
+
+                                    <button data-share="twitter" aria-label="Share on X">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M18.9 2H22l-6.76 7.73L23 22h-6.2l-4.86-6.3L6.6 22H2l7.23-8.26L1 2h6.3l4.4 5.72L18.9 2z"/>
+                                        </svg>
+                                    </button>
+
+                                    <button data-share="linkedin" aria-label="Share on LinkedIn">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v16H0V8zm7.98 0h4.8v2.18h.07c.67-1.27 2.3-2.6 4.74-2.6 5.07 0 6.01 3.34 6.01 7.68V24h-5V16.2c0-1.86-.03-4.25-2.59-4.25-2.6 0-3 2.02-3 4.11V24h-5V8z"/>
+                                        </svg>
+                                    </button>
+
+                                    <button data-share="facebook" aria-label="Share on Facebook">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M22 12a10 10 0 10-11.5 9.95v-7.04H8.08V12h2.42V9.8c0-2.39 1.42-3.7 3.6-3.7 1.04 0 2.13.18 2.13.18v2.35h-1.2c-1.18 0-1.55.73-1.55 1.48V12h2.64l-.42 2.91h-2.22v7.04A10 10 0 0022 12z"/>
+                                        </svg>
+                                    </button>
+                                
+                                    <button data-share="copy" aria-label="Copy link">📋</button>
+                                    <button onclick="navigator.share?.({ url: location.href })">📤</button>
+                                
+                                </div>
+            
+                <div id="UB2026" class="sub-tab-panel active" role="tabpanel">
+                    <h1><strong>Union budget FY2026</strong></h1>
+                    <a href=https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/9 target="_blank" rel="noopener noreferrer"><b style="color:greenyellow">Poll</b></a><br>
+                    <a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/8" target="_blank" rel="noopener noreferrer"><b>Discussions</b></a>
+                    <p>Estimated sources and value of revenue -<br> 
+                        <img src="BudgetSources .png"></img>
+                    <em>(Values in lk.cr.) <br> 
+                    
+                    Above is an AI-generated estimate of ~35-39lk.cr. Expected to be collected in FY26 (Impact of GST reforms on reduced collections) baked in above. Source: Grok</em><br>
+
+                    Revenue is expected to be flat, ongoing stabilization of direct and indirect taxation is expected. Forecast of the union budget to be presented on 1st Feb’26. Source: Grok
+                    </p><img src="BudgetSpending.png"></img>
+                        <em>(Values in lk.cr.)</em></p>
+
+                    <p>Below are some points to consider with the above budget forecast based on Viksit Bharat (Make in India), Consumption stimulus, and Welfare priorities: <br>
+                        <ul>1. <strong>Debt control</strong> - Interest payouts continue to remain 30%+ of total budget. This may continue as loans mature over an extended period of time corroded by inflation. This will also be inline with fiscal deficit (4-4.3%) and inflation (2-2.5%) targets factoring in 100bps rate cuts through the year, and expected GDP growth rate of 8%.</ul>
+                        <ul>2. <strong>Road, Transport, Highways, Railways</strong> will continue to remain a priority to drive consumption. However, due to reducing collections, and demand for income, capital gains tax reduction, the allocation may remain flat (or 5%+), and focus on completion of existing infra projects may intensify.</ul>
+                        <ul>3. <a href=https://www.ey.com/en_in/newsroom/2026/01/ey-india-expects-union-budget-2026-to-prioritize-growth-continuity-tax-certainty-and-sector-led-investment > <b style="color:yellowgreen">This EY report</b></a> calls for digitization and simplification of BOE and other documentation for customs, and toll across trade hubs transfers to improve tax compliance and coverage including reforms for IFSCs. Adjacent defense spending may also continue in-line, like naval investments which may have synergies infra-synergies</ul>
+                        <ul>4. <strong>Subsidies</strong> (MNREGA already being repackaged) may come with reductions.</ul>
+                        <ul>5. While overall transfers to state may increase to drive top-down implementation of rural and <strong>SME/MSME programs</strong>; subsidy rationalization may result in commensurate reduction in allocation to ~7-8%</ul>
+                        <ul>6. <strong>Export incentives</strong> to supplement US tariffs on capital goods, textile, etc. industries, and budget allocation to compensate for import rebate waivers from China and similar policies globally to promote profitability in these industries, including EMS imports</ul>
+                        <ul>7. While investment for data-centers and other AI themes (like electronics, chips, energy, etc.) may be required, it may be partially funded through PLI schemes and partially by encouraging FDI to also facilitate knowledge transfer.</ul>
+                    </p>
+                    
+                    <footer><em style="font-size:small"> 
+                        <p><b>Sources:</b></p> 
+                            <ul><a href="https://www.indiabudget.gov.in/doc/eb/stat3a.pdf" style="color: greenyellow;">Ministry of finance 25-26, Full Document</a></ul>  
+                            <ul><a href="https://www.indiabudget.gov.in/doc/Budget_at_Glance/bag3.pdf" style="color: greenyellow;">Budget at a Glance</a></ul>  
+                            <ul><a href="https://www.indiabudget.gov.in/doc/rec/allrec.pdf" style="color: greenyellow;">Receipt Budget</a></ul>  
+                            <ul><a href="https://www.indiabudget.gov.in/doc/eb/vol1.pdf" style="color: greenyellow;">Expenditure Budget</a></ul>
+                            <ul><a href="https://cga.nic.in" style="color: greenyellow;">CGA Monthly Accounts</a></ul>
+                            <ul><a href="https://www.ey.com/en_in/newsroom/2026/01/ey-india-expects-union-budget-2026-to-prioritize-growth-continuity-tax-certainty-and-sector-led-investment" style="color: greenyellow;">EY Report on Budget expectations</a></ul>  
+                            <ul><a href="https://www.nipfp.org.in/publications/working-papers" style="color: greenyellow;"></a></ul>                        
+                            <ul><a href="https://www.rbi.org.in/Scripts/AnnualPublications.aspx?head=Handbook%20of%20Statistics%20on%20Indian%20States" style="color: greenyellow;">RBI</a></ul>
+                            </em>
+                        </footer>
+                </div>
+            
+                <div id="T2026" class="sub-tab-panel" role="tabpanel">
+                    <h1>Top Trends to watch out for in 2026</h1><br>
+                    <a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/2" target="_blank" rel="noopener noreferrer"><b>Discussions</b></a>
+
+                    <p><ul><strong>1. Rationalization of AI investments:</strong> As initial have been made over the last few years, over 2026-27 there may be additional pressure to identify revenue generation opportunities and rationalize costs (drive efficiencies). As these initiatives play out, we may see a consolidation of AI companies, which may lead to some short-term capital churn between asset classes (Stocks to gold/bonds/currencies and then back). This may have a cascading effect on the Indian IT sector as they may see an influx of these efficiency projects to copilot with AI.</p></ul>
+
+
+                    <p><ul><strong>2. Commodity Repricing:</strong> If the price of the industrial use-case commodities like silver, copper, palladium, platinum, steel, etc. outpace the R&D cost of a substitute then we may see a correction in some of these asset classes. There may also be a supply side capacity lift, or mining technological breakthrough simplifying the extraction process and rationalizing the commodity prices. Crude and agricultural commodities may see movement if these elevated prices persist. </p></ul>
+
+
+                    <p><ul><strong>3. Geopolitical stability:</strong>   
+                        Listed are few of the strategically important trending geographies from a trade and commodities perspective and resolution or escalation of these issues may provide a direction to companies operating globally.
+                        <ul>a. US Tariff-Currency devaluation</ul>
+                        <ul>b. Japanese interest rates</ul>
+                        <ul>c. ASEAN political stability for India</ul>
+                        <ul>d. Ukraine-Russia war</ul>
+                        <ul>e. Thailand-Cambodia war</ul>
+                        <ul>f. Israel-MiddleEast war</ul>
+                        <ul>g. African conflicts; e.g. Sudan</ul>
+                        <ul>h. Taiwan-China 2027 annexation</ul>
+                        <ul>i. Panama Canal Monitoring</ul>
+                        <ul>j. Venezuela Inflation and political stability</ul> <br>
+                    </ul>
+                    </p></ul>
+
+                    <p><ul><strong>4. Inflation, IIP, Unemployment:</strong> All-time low inflation, growing industrial production may be offset by expected reduced spending due to GST rate cuts; or an increase in income taxes with rising unemployment from jobcuts in the IT sector may lead to churn in the consumption conditions for the Indian market leading to potentially material impact on FMCG, FMCD, Auto sectors, and subsequent impact on related sectors. Government spending should however continue on infrastructure and defense despite these potential headwinds unless any serious eventualities are realized.</p></ul>
+
+
+                    <p><ul><strong>5. Lending and deposit rates, asset quality, interest rates:</strong>  Monitoring sector-wise lending growth, deposit rates, asset quality, and central bank interest rates could give us an early alert of any sectors over or under performing. Due to consumption slowdown, low inflation, rising unemployment, there is an expectation globally to cut central bank rates to drive growth, but bank lending and deposit rates, along with asset quality figures should help us identify how much of this is trickling down to the economy and how much earnings growth can be realistically expected.</p></ul>
+                    <p>Summarizing the performances of indices below; these current valuations in conjunction with above macro themes could provide a view on overall market and economic sentiment
+                    <img src="Indices Performance.png">
+                </div>
+
+                
+                <div id="Comm" class="sub-tab-panel" role="tabpanel">
+                    <article><h1>Are commodities in a “once-in-decades” super cycle?</h1><br>
+                    <a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/4" target="_blank" rel="noopener noreferrer"><b>Discussions</b></a>
+                    <p>The short answer is yes, maybe. </p>
+
+                    <img src="Commodities.png">
+
+                    <h2>Why are the prices up?</h2>
+                    <p><h3>1. Store of value:</h3>
+                    Since the 2008 financial crisis (actually since the delinking from the standard to peg currency value to gold), acceleration of money printing (in USD, but also globally) to drive economic growth (among other things), has devalued fiat currency in the form of annual inflation in money supply ~5-10%, partially compensated by progressive growth in productivity. However, this trend seems to have been aggravated by the COVID pandemic, high sovereign indebtedness, global geopolitical instability (surfacing as regional conflicts, trade/tariff renegotiations) leading to flight of capital away from equity markets, to sovereign bonds, and subsequently to store of value assets like gold (and silver). This excess liquidity concentrating onto a single asset class along with, now, central bank participation, ETF flows and retail speculation, have led to a parabolic growth in these assets into potential bubble territory.</p>
+
+                    <p><h3>2. Industrial applications driven by Electric Vehicles/Semi-conductor/battery technology:</h3>
+                    The fundamental properties of metals like Gold, Silver is high conductivity (also Copper), low reactivity (corrosion-resistance), and malleability make them conducive to wide-scale industrial application, especially due to shortage of Copper in previous years (demand now relatively stabilized as per below graphic), and the expected AI boom and parabolic growth in applications and related productivity may lead to a “new era” of demand for precious metals currently reflected in the prices.<br></p>
+
+                    <img src="Periodic Table.png">
+                    <p style="font-size:small"><em>As you can see palladium, platinum, copper, gold, silver, gold are all around each other in the periodic table</em></p>
+
+                    <p><h2>What happens now?</h2>
+                    Whether we consider metals as a store of value or of industry application due to ongoing macro trends, there is always the risk of these trends evolving or the cost-benefit of base case metals becomes conducive to substitution.</p>
+
+                    <p><h3>A. Geopolitical resolution</h3>
+                    The sentiment around the USA tariff renegotiation and risk of currency depreciation could ease by end of 2027 as the rollover of US sovereign debt to new rates should conclude by then. BOJ interest rate shocks should also ease by then as they may get domestic inflation under control. We may also have visibility on any potential change to the current arrangement with China-Taiwan, or other countries in the interim are able to build sustainable manufacturing redundancies to make the issue irrelevant from a currency stability standpoint. Localized conflicts in Europe could also reach some form of equilibrium, since end of 2027 could be enough time for other European countries to readjust their budget allocations to military/industrial infrastructure (As Germany seems to have adjusted). These factors could lead to reallocation of speculative liquidity currently in precious metals. The amount of correction in these metals could also give a fair indication of the proportion of speculative liquidity in the system.</p>
+
+                    <p><h3>B. Industrial applications</h3>
+                    Since most competent industrial treasuries would be aware of demand for input commodities before institutional and retail speculative capital, they should have already booked futures to deliver the metals required for future years at an acceptable cost, hence the current price of the commodity may already have all this future demand priced in. If there are new entrants/additional demand of these metals unmet by these contracts, there must be a threshold price that keeps these applications economically feasible, and these assumptions may be susceptible to parabolic moves in input commodity prices. This may have already led to R&D expense in feasible substitutes (Copper, Graphene, Aluminium, etc.) to overcome their current limitations of corrosion, efficiencies, or synthesis/supply. Even if there is a marginal improvement in these current limitations, along with a growth in prices, there would be a point where the switch over would make economic sense, and subsequently economies of scale may kick in.<br><br>
+
+                    We have already seen this with Silver in the 80s, which to my understanding at the time may have been driven by applications in cameras (among other things).</p>
+
+                    <p>In light of the above risks, the current valuations may not be sustainable for speculative investors, and a reversion to mean, or substitution may be inevitable</p>
+
+                    <footer style="font-size:small"><em>Disclaimer: <ul>1. This is research to encourage discussion and education (driven by online resources, Grok, Google) and not investment advice.</ul> 
+                                            <ul>2. I own a material (to me) position in these assets</ul></em></footer>
+                    </article>
+                </div>
+
+                <div id="Lend" class="sub-tab-panel" role="tabpanel">
+                    <article>
+                    <h1>Lending Slowdown?</h1><br>
+                    <a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/5" target="_blank" rel="noopener noreferrer"><b>Discussions</b></a>
+                    <p>Not yet.</p>
+                    
+                    <p>It is important to track Lending/Banking performance guage the performance of the economy and market sentiments for two reasons:
+                        <ul>1. It is one of the most robust sectors in India, and potentially global leaders with innovations like UPI, evidenced by the performance (or sentiment) surrounding the sector as below.</ul>
+                        <img src="Indices Performance.png">
+                        As you can see, financial services and banking has outperformed most sectors only excluding multi-decadal performance by metal sectors and auto demand. <br>
+                        <img src="BankCreditSummary.png">
+                        Over-all lending continues to grow inline with GDP exposure; Food-credit seems to have taken a dip. Between Oct'25 and Nov'25 there seems to be an acceleration in lending - this could show up in quarterly results. Below is also a summary of few large PSU and private sector banks and their operational metrics which signal strong growth and asset quality.<br>
+                        <img src="Bank-wise Metrics.png">
+                    </p>
+                    <p>  <ul>2. Sector-wise lending provides a data point on how certain sectors may be expected to perform over 12-24 months (or longer for longer cycle sectors)</ul>
+                    </p> 
+                    <p>  <img src="Sectoral Credit Deployment.png">
+                        Some observations to simplify this data dump (<em style="font-size:small">I have input numbers instead of graphs to provide a sense of the scale. Please note that this is outstanding loan amounts data. New book - old book run-off = net figures</em>)
+                        <ul><strong>a. Food processing:</strong> Edible oils' lending as been decling in 2025, this slowdown seems to be turning around; sugar lending is slowing down so potentially some capex lending may have been completed or some prior lending may have been paid off. Apparently, sectoral headwinds in the tea sector. (<em style="font-size:small">Tata Consumer seems to be the only large player in this sector that may benefit from any consolidation.</em>)</ul>
+                        <ul><strong>b. Textiles:</strong> This sector may be benefiting from additional lending with a forward looking view of support to exporter-driven considering there is currency depreciation during this time. However, while YoY rates are speeding up MoM outstanding is lower, so higher run-offs than new book?</ul>
+                        <ul><strong>c. Fossil & Nuclear fuels</strong> funding is up. Crude oil and Petrochemicals could be an investment theme over 3-5 years.</ul>
+                        <ul><strong>d. Metal mining</strong> lending is up; looks logical based on current supply shortage narrative.</ul>
+                        <ul>e. Lending in <strong>Electronics</strong> could signal optimism in EMS (Kaynes, Dixon, Tata Tech)</ul>
+                        <ul>f. Slowdown in lending in <strong>Ports, Airports, Telecommunications</strong> aligns with the expectation of a slowdown in new govt. spending and focus on implementation, execution/efficiency.</ul>
+                    </p>
+                    <footer style="font-size:small"><em>This page will be updated monthly. You can bookmark it, until the mailer is up.</em></footer>
+                    </article>
+                </div>
+
+            </div>
+            
+            <div id="Opinion" class="tab-panel" role="tabpanel"><br>
+                <div class="sub-tab-buttons">
+                <button class="sub-tab-button active" data-sub-tab="Der" role="sub-tab" aria-selected="true">Derivatives</button>
+                <button class="sub-tab-button" data-sub-tab="Phrm" role="sub-tab" aria-selected="false">Pharmaceuticals</button>
+                <button class="sub-tab-button" data-sub-tab="ORM" role="sub-tab" aria-selected="false">Oil Refining & Marketing</button>
+                </div>
+                                         <!--share buttons-->
+                                <div class="share-buttons" aria-label="Share this section">
+                                    <button data-share="whatsapp" aria-label="Share on WhatsApp">
+                                        <svg viewBox="0 0 32 32" aria-hidden="true">
+                                        <path d="M19.11 17.66c-.27-.14-1.58-.78-1.83-.87-.25-.09-.43-.14-.61.14-.18.27-.7.87-.86 1.05-.16.18-.32.2-.59.07-.27-.14-1.14-.42-2.18-1.35-.81-.72-1.36-1.6-1.52-1.87-.16-.27-.02-.42.12-.56.13-.13.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.02-.22-.53-.45-.46-.61-.47l-.52-.01c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3s.99 2.68 1.13 2.86c.14.18 1.95 2.98 4.73 4.18.66.28 1.18.45 1.58.58.66.21 1.26.18 1.73.11.53-.08 1.58-.64 1.8-1.26.22-.61.22-1.13.16-1.26-.05-.13-.2-.2-.43-.34z"/>
+                                        <path d="M16 3C9.38 3 4 8.38 4 15c0 2.64.86 5.08 2.31 7.05L4 29l7.19-2.29A11.94 11.94 0 0016 27c6.62 0 12-5.38 12-12S22.62 3 16 3z"/>
+                                        </svg>
+                                    </button>
+
+                                    <button data-share="twitter" aria-label="Share on X">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M18.9 2H22l-6.76 7.73L23 22h-6.2l-4.86-6.3L6.6 22H2l7.23-8.26L1 2h6.3l4.4 5.72L18.9 2z"/>
+                                        </svg>
+                                    </button>
+
+                                    <button data-share="linkedin" aria-label="Share on LinkedIn">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v16H0V8zm7.98 0h4.8v2.18h.07c.67-1.27 2.3-2.6 4.74-2.6 5.07 0 6.01 3.34 6.01 7.68V24h-5V16.2c0-1.86-.03-4.25-2.59-4.25-2.6 0-3 2.02-3 4.11V24h-5V8z"/>
+                                        </svg>
+                                    </button>
+
+                                    <button data-share="facebook" aria-label="Share on Facebook">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M22 12a10 10 0 10-11.5 9.95v-7.04H8.08V12h2.42V9.8c0-2.39 1.42-3.7 3.6-3.7 1.04 0 2.13.18 2.13.18v2.35h-1.2c-1.18 0-1.55.73-1.55 1.48V12h2.64l-.42 2.91h-2.22v7.04A10 10 0 0022 12z"/>
+                                        </svg>
+                                    </button>
+                                
+                                    <button data-share="copy" aria-label="Copy link">📋</button>
+                                    <button onclick="navigator.share?.({ url: location.href })">📤</button>
+                                
+                                </div>
+
+                <div id="Der" class="sub-tab-panel active" role="tabpanel">
+                    <article>
+                    <h1>Why Derivatives don't quite work as intended in the Indian market</h1><br>
+                    <a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/3" target="_blank" rel="noopener noreferrer"><b>Discussions</b></a>
+                    <p style="font-size:small"><em><b>TLDR:</b> Strong institutional consensus (updward), proliferation of said consensus, illiquid option writing, and high frequency of 4SD (Standard Deviation) events results in elevated valuations and subsequent inefficient price discovery together resulting in speculation in suboptimal positions</em></p>
+
+                    <blockquote><p style="text-align:center"><strong>“90%+ retail investors in the Indian F&O market are loss-making”</strong></p></blockquote>
+                    
+                    <section>
+                    <p>This is a widely quoted statistic displayed as a “caution” on the internet. Since these are risk management instruments, it is counter-intuitive that participants would lose money instead of gaining. <br>
+                    There are 3 kinds of participants in derivatives market: I will stick to equity and/or commodity markets as they are most discussed markets currently. <br>
+                    </p>
+                    <p>
+                    <b>Participants:</b><br>
+                    <ul>1. Industrial consumers for hedging for demand costs in commodity markets OR Institutional investors hedging their “demand” for long-term equity investment or controlling (or funding) interest in a company </ul>
+                    <ul>2. Industrial suppliers of commodities OR Promoters and primary (pre-IPO) shareholders of a company who may hedge their existing exposure through F&O
+                    Hereafter referred to as “Institutions” </ul>
+                    <ul>3. Retail investors who may want to participate in earnings or capital appreciation in either asset classes </ul>
+                    </p>
+                    
+                    <p>
+                    <b>Independent decision-making</b> of above participants is key to an efficient price discovery of any publicly traded asset. Futures (Instrument to setup an obligation to buy/sell an asset) or Options (Instrument to retain an option to buy/sell an asset) are used to manage the risk from the uncertainty in this price discovery mechanism.
+                    </p>
+
+                    <p>
+                    <b>Instrument:</b>
+                    Futures with a delivery mandate (if available over the counter for the intended asset) require participants to have material liquidity to enable them to take on meaningful exposure leading to mostly industrial or HNI participation. However, Options require participants to pay only a premium to retain the option to buy/sell an underlying asset which allows a participant to take a large delivery exposure with a fraction of the capital required to purchase the underlying upfront.<br>
+
+                    <b>Pricing:</b><br>
+                    <img src="BlackScholesModel.png">
+
+                    The <strong>Black-Scholes model</strong> is a theoretical model used to price an option, the key aspects impacting option prices, and hence the profitability of any participant are as follows:
+                    <ul>a. Underlying asset price</ul>
+                    <ul>b. Strike price of option</ul>
+                    <ul>c. Time to expiry</ul>
+                    <ul>d. Volatility of the underlying asset</ul>
+                    <ul>e. Risk-free Rate</ul>
+                    
+                    </p>
+
+                    <p>
+                    Above is a broad understanding of the participants and drivers driving the gains/losses on speculation/hedging through options; why people would lose money most of the time however is more nuanced and becomes clear only when the rubber hits the road.
+                    </p>
+                    </section>
+
+                    <section>
+                    <p>
+                    Below are the execution aspects driving these losses:
+                    <h3>1. Awareness: Inadequate understanding of underlying asset price/valuation and/or pricing/tenor mechanisms of options</h3>
+
+                    Fundamentally, options are risk hedging instruments, which are used to manage the risk of investing in the underlying asset class. However, OI data suggest majority of the options liquidity is concentrated in index options, and weekly expiries. Retail mostly doesn’t buy indices for weekly investment, most of the index retail investment flow comes through mutual funds via SIPs, so retail participation in index options and weekly expiries is most likely speculative.
+
+                    NIFTY50 is a diversified index and by definition should be less volatile than say, an individual stock or sector-specific indices, which may make holding the option less valuable. However, the disproportionate liquidity in these indices bid up (or down) the risk-return on these options for short tenors suboptimal, especially due to the exponential impact of time decay. For investors speculating in options of individual companies, those markets are illiquid for tenors beyond 1-month, which make the options less attractive for hedging purposes if the guidance is for long-term investment (as per the tax-regime).
+
+                    <b>Writing options however, becomes disproportionately profitable if there are willing buyers</b> if you look at the difference in liquidity for individual stocks and indices and long and short tenors (Refer Appendix).
+
+                    Comparing the above, to any competent institutional investor who would have an edge with best trading technology, people, understanding, networks, and the directional capital to write options – Retail investors rarely stand a chance to spot any outsized return typified by a turning market. 
+
+
+                    <h3>2. Infrastructure: Inadequate guardrails/governance on time to expiry, fair valuation and liquidity in contracts </h3>
+                    Given the speculative nature of majority of the retail flow into the options market, and no single direction of this capital established, the deficiency of the retail participant is not unclear. <br>
+
+                    However, market-making and surrounding infrastructure simplify the above behavior based on the availability of the below features/bugs: <br>
+                    <ul>a. Illiquidity or mispriced options available for longer tenors</ul>
+                    <ul>b. Short tenor expiries encouraging speculation</ul>
+                    <ul>c. Limited punitive action against institutional players manipulating the market (E.g. Jane Street)</ul>
+
+                    While the above aspects are widely understood, and for lack of an alternative, accepted, there is a fundamental upward bias in the prices of the underlying assets as a result.
+
+
+                    <h3>3. Speculation/Manipulation: Euphoric speculation by retail investors (as evidenced by the record bull run and IPO valuations), vs. Organized (Advertent/Inadvertent) Manipulation by institutional players</h3>
+
+                    <p>The above two points cover a large aspect of the retail speculation within options, and the edge institutional players have over retail investors; however, a key narrative regarding the network-effect of capital controlled by institutions and politically connected participants forms a key aspect of the upward bias in the asset prices in the Indian market, to my mind. </p>
+                    
+                    <p>Let me explain - <br>
+
+                    Since, 2014 the government through AMFI, has run the “Mutual funds sahi hai” campaign to make Indian markets more liquid. This was part of the promise of the NDA government as markets rallied on Modi’s election. This also makes sense, to increase liquidity in a market to provide an efficient price discovery mechanism which can help attract foreign investment (FDI/FII).
+
+                    Record SIP flows have since moved into mutual funds of all categories (small, large, mid, sectoral, themed), while large foreign and institutional players also invest their own proprietory capital through funds/investment entities into the market. SIP flows can only be invested in buying assets, whatever the price may be (as is highlighted by the high PE of major stocks), and especially since the market investment narrative is  centralized, this capital is <strong>not independent in its decision-making</strong>, having been run as a campaign centrally and executed by SIP managing funds.
+                    </p>
+                    <p>
+                    If the liquidity of the buying funds matched the arbitrage funds, or high-risk hedge funds able to short over-valued assets there would be reasonable downward bias to offset the current euphoria about Top-5 GDP India and the growth story, in which capital allocation naturally leads execution and earnings outcomes. In the Indian market government spending is driving, as is the need, Infrastructure, agriculture, and defense development alongwith fiscal and current account deficit management. These projects are notorious for project over-runs and hence, may lead to even further delay in realization of expected earnings, if done correctly. This upward bias (or lack of downward bias) is also encouraged by participation in the stock market by major decision-making politicians, and direct investment through stake purchases into entities like LIC and opening up stock investment for pension funds.
+
+                    <br><strong>Without this downward pressure on underlying asset prices we run the risk of sharp corrections on large standard deviation events leading to immediate price discovery or worse, over-correction, which currently can only be realized through a “run on the mutual funds”</strong>, in case there is a systemic need for funds in the market. The Indian market has still shown significant resilience countering 4+ SD (Standard Deviation) events with our own 4+ SD events, examples;
+                    </p>
+                    <p>
+                    Examples:
+                    <ul><strong>1. Trade Tariffs and Geopolitical tensions!</strong> → Diplomatic gymnastics managing Crude imports through Russia, while placating USA mandates, and E10-E20 in fuel consumption to offset over-reliance on Russia as well, all while dodging the politically charged Ukraine-Russia war. Managing relationship with China to drive EMS growth while controlling military mischief within the ASEAN region and regional unrest in Pakistan, Nepal, Bangladesh, and Sri Lanka. All major indices have provided 5%+ returns, while Gold/Silver continue to accelerate on concerns based on these issues. This also happened in the backdrop of the multi-decade event of the Japanese interest rate hike, which may have a material impact on the global liquidity flows, as subsequent FII asset allocation which may have surfaced in India as the record FII sell-off, which DIIs have absorbed.</ul>
+
+                    <ul><strong>2. Lending slowdown!</strong> →  While lending has slowed down over the past year with worsening asset quality (improving over the previous quarter), one would not expect such swift action from RBI (or one would) in rewriting the provisioning norms for banks forseeing the impact of worsening asset quality and pressure on margins as lending growth slows. This alongwith PSB Manthan aiming to improve ROAs of public sector banks by organic or inorganic, local/foreign investment has helped maintain the sentiment in the market. How much and how soon the lending growth and asset quality impact on NIMs is realized however, is anybody’s guess. Bond yields would suggest Jul’26 onwards, RBI provisioning implementation timelines would suggest Mar’27. (More on this to follow and tracking page)</ul>
+
+                    <ul><strong>3. Commodity “Supercycle”!</strong> → Another 4SD event which may have impacted input costs of a lot of the companies is the increasing speculation, not just in Gold/Silver, but also in Copper, Steel, Palladium, Platinum. The rise in input commodity prices is usually foreseen and hedged against by institutional players but may impact the flow of retail liquidity in metal ETFs (still a fraction of the overall liquidity in the Indian market).</ul>
+
+                    <ul><strong>4. Resilience of Indian Corporate Governance</strong> → In light of the above 4SD events, major Indian corporations have shown world-class risk management measures.
+                    <br>a. TATA Motors – Despite several events like the JLR cyber attack, production halt, death of Ratan Tata, discord in the board of directors, demerger of the passenger/commercial businesses, commodity prices, EV adoption and local market competition – TATA motors continues to maintain status quo in their business, with post-demerger valuations still matching previous valuations, which may signal an internal overhaul in the business <br>
+                    b. Many IT companies seem to have incorporated the synergies from AI-led disruption which is reflected in the reduction in headcount which may potentially lead to better margins in future<br>
+                    c. Pharma companies investing in the US market, being able to create a price moat, allowing them to survive the trade tariff on-slaught. (More on this to follow)<br>
+                    d. Prudent risk-management by Reliance Industries in de-risking from sanctioned oil exposure to maintain the operating margin advantage over other oil refining and marketing companies.<br>
+                    </ul>
+                    </section>
+
+                    <section>
+                    All of the above are only a handful examples displaying the anti-fragile nature of the Indian business and subsequently the stock market. However, the frequent occurrence of such 4SD events and a limited availability of expertise and access to information to predict the timing and impact of the event or the efficacy of the counter-measures require an indepth and ongoing knowledge of the system and ongoing affairs. <br>
+
+                    <p>This separates the retail investor from the expert/institution/inside who may profit from such events.
+
+                    It is also a common anecdote that a lot of speculators lose their capital and then stop trading completely; this metric may also be susceptible to survivor (or in this case not-survivor) bias.</p>
+
+                    <h2>What are the solutions?</h2> I am not an investment expert, but I can suggest prudent risk management -
+
+                    <ul><strong>1. Limiting and Diversifying Exposure</strong> - 5% of total capital, and if you are looking for a 10% ROI, maybe 6/10 positions are in the direction of your expected trend. There are tools available which allow you to calculate the correlation of various investments in your portfolio, or you could look this up, but they are mostly logical.</ul>
+                    <ul><strong>2. Write Options</ul></strong>
+                    <ul><strong>3. Only Hedge?</ul></strong>
+
+                    Anything beyond this, like betting in the direction of a trend, charts, timing, etc. is upto your research and understanding, but with adequate risk management maybe we are able to protect our capital and minimize the impact of the edge institutions have against the retail investor. Ultimately, it is a zero-sum game - if you are on one side of a trade, there is someone on the other side.
+
+                    If in this case, we know that DII holding dominates and drives market holding, and option writers are also institutional, <br> <strong>there would be two kinds of institutional option writers:</strong>
+                    <ul>a. Who own an asset and write puts to lock in their sale price for the purpose of hedging</ul>
+                    <ul>b. Who own an asset and write puts knowing they are not going to sell their asset understanding this upward bias</ul>
+
+                    And the difference between the two, for the retail investor, isn’t much, and what happens in 2026 is anybody’s guess.
+                    </section>
+                    </p>
+
+                    <Footer style="font-size: small; text-align: left;">
+                    <em>Notes:
+                    <ul>1. Since theoretical options pricing assumes normal distribution, it may not perfectly apply in a price discovery environment with a sustained upward bias</u>
+                    <ul>2. This will also reduce the effectivity of tools like Bollinger Bands/Standard deviation based event probabilities based on normal distribution</ul>
+                    </em></Footer>
+                    
+                    <h2>Appendix as on end of Dec'25</h2>
+                    <p> 6th Jan NIFTY50 Expiry OI Vs. 27 Jan NIFTY50 Expiry OI </p>
+                    <img src="6JanNIFTY.png"> <img src="NIFTY50JanExpiry.png"> 
+
+                    <p>Jan BNF Expiry OI Vs. Feb BNF Expiry OI </p>
+                    <img src="BNFJan.png"> <img src="BNFFeb.png"> <br> 
+
+                    <p>Jan OI Vs. Feb OI for high market cap individual stocks </p>
+                    <img src="RelianceJan.png"> <img src="RelianceFeb.png">
+                
+                </article>
+
+                </div>
+
+                
+                <div id="Phrm" class="sub-tab-panel" role="tabpanel">
+                    <h1>Opportunities in Pharmaceuticals?</h1><br>
+                    <a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/6" target="_blank" rel="noopener noreferrer"><b>Discussions</b></a>
+                    <p>The Indian pharmaceutical industry has been a consistent compounder for many years (as can be seen by the high PE most companies command), growing in revenue both domestically and globally. Based on my research, Indian pharmaceutical companies provide the below two value additions in the pharmaceutical ecosystem:
+                        <img src="Pharma Industry Screener.png">
+                        <ul>a. Cheap generic OTC or patented drugs in developed markets in the USA known colloquially as the pharmacy of the world. The depreciation of the INR may provide a key tailwind to the industry along with specialty chemicals supplying globally and CRAMs specializing organizations like Divis Labs.</ul>
+                        <ul>b. Distribution of global drugs in the Indian market (Cipla, Torrent)
+                        <img src="Pharma Industry Benchmarking.png">
+                        Above is a summary of some companies and their operations. These have been till date immune to US tariffs as the decree applies only to organizations who have not made any direct investment in the US; which in this graph is only Torrent Pharma (at the time of writing).<br> 
+                        
+                        <footer><em style=font-size:small>I will subsequently update this with research on key organizations like Cipla, Mankind, Zydus, etc.</em></footer>
+                    </p>
+                </div>
+
+                <div id="ORM" class="sub-tab-panel" role="tabpanel">
+                    <h1>Why does Reliance consistently beat BPCL, IOCL, HPCL? - Indian Oil Refining and Marketing</h1><br>
+                    <a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/7" target="_blank" rel="noopener noreferrer"><b>Discussions</b></a>
+                    <p>Based on the below comparison, you can see that RIL (Oil Refining and Marketing) consistently beats BPCL, IOCL, HPCL on operational performance. There are two hypothesis to why that may be: 
+                    <img src="Oil Refining Screener.png"><br>
+                    <em style="font-size:small">Post Edit (16-01-2026) - Including product-wise break-up as this is not readily apparent from the overall margins (Retail, Telecom both relatively lower margin contributing businesses)</em>
+                    <img src="RIL - Productwise break-up.png"><br>
+                    <ul><strong>1. Operational Efficiencies</strong></ul>
+                    <img src="CrudeOilRefining.png">
+                    As we can see, there is clear opportunity to find operational efficiencies in heating fuel consumption, economies of scale in refining capacity and minimizing leakages in collection of distillates.<br>
+                    From the below table, we can see that a lot of the PSU refinery capacity is decades old, and may need upgradation to meet these efficiencies. HPCL is also adding refinery capacity (9-27MMTPA across projects) which could provide an operating margin boost to PSU refineries. 
+                    <img src="List of Refineries.png">
+                    <ul>2. <strong>Sourcing of low-cost oil</strong>: BRENT and other crude oil trading benchmarks only form a small portion of global traded crude oil volume. Companies/Countries may be able to procure cheaper oil bilaterally like Russia till recently, and Saudi potentially.</ul>
+                    
+                    </p>
+                </div>
+            </div>
+
+            <div id="about" class="tab-panel" role="tabpanel">
+                    <h1>About</h1>
+                    <p>Publishing my research for the purpose of education, peer review, and discourse. You can reach out to me at:</p>
+                    <ul><strong>Email: </strong>internetfail123456@gmail.com</ul>
+                    <ul>On X (formerly known as Twitter) <a href="https://x.com/BearAGrins" target="_blank" rel="noopener noreferrer"><img src="new-twitter-x-logo-twitter-icon-x-social-media-icon-free-png.png"></a></ul>
+                    <ul>On Youtube<a href="https://www.youtube.com/@OnlyBackoftheEnvelope" target="_blank" rel="noopener noreferrer"><img src="youtube.png"></a></ul>
+                    <ul><a href="https://github.com/internetfail123456-ship-it/backoftheenvelope/discussions/1" target="_blank" rel="noopener noreferrer"><b>Github discussions</b></a></ul>
+            </div>
+
+            <!-- To add a new tab, duplicate a panel like this:
+            <div id="new-tab-id" class="tab-panel" role="tabpanel">
+                <h1>New Tab Title</h1>
+                <p>Your custom content here.</p>
+            </div>
+            -->
+        </div>
+        <hr class="page-end-divider">
+        <div class="share-buttons" aria-label="Follow">
+        <a href="https://x.com/BearAGrins" target="_blank" rel="noopener noreferrer"><img src="new-twitter-x-logo-twitter-icon-x-social-media-icon-free-png.png"></a></div>
+    </div>
+
+
+        <script>
+            /* ---------- MAIN TABS ---------- */
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+
+                    document.querySelectorAll('.tab-button').forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+
+                    document.querySelectorAll('.tab-panel').forEach(p => {
+                        p.classList.remove('active');
+                    });
+
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
+
+                    const panel = document.getElementById(tabId);
+                    panel.classList.add('active');
+
+                    updateHash(tabId);
+
+                    /* 🔁 RESET SUB-TABS WHEN ENTERING ABOUT */
+                    if (tabId === 'Current Affairs') {
+                        resetAboutSubTabs(panel);
+                    }
+
+                    if (tabId === 'Opinion') {
+                        resetAboutSubTabs(panel);
+                    }
+                });
+            });
+
+            /* ---------- SUB-TABS (SCOPED) ---------- */
+            document.querySelectorAll('.sub-tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const subTabId = button.dataset.subTab;
+                    const container = button.closest('.tab-panel');
+                    if (!container) return;
+
+                    container.querySelectorAll('.sub-tab-button').forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+
+                    container.querySelectorAll('.sub-tab-panel').forEach(p => {
+                        p.classList.remove('active');
+                    });
+
+                    button.classList.add('active');
+                    button.setAttribute('aria-selected', 'true');
+
+                    updateHash(container, subTabId);
+
+                    const panel = container.querySelector(`#${subTabId}`);
+                    if (panel) panel.classList.add('active');
+                });
+            });
+
+            /* ---------- DEFAULT ABOUT STATE ---------- */
+            function resetAboutSubTabs(container) {
+                if(container='Current Affairs')
+                {const defaultButton = container.querySelector('.sub-tab-button[data-sub-tab="UB2026"]');
+                const defaultPanel  = container.querySelector('#UB2026');}
+
+                if(container='Opinion')
+                {const defaultButton = container.querySelector('.sub-tab-button[data-sub-tab="Der"]');
+                const defaultPanel  = container.querySelector('#Der');}
+
+                container.querySelectorAll('.sub-tab-button').forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                });
+
+                container.querySelectorAll('.sub-tab-panel').forEach(p => {
+                    p.classList.remove('active');
+                });
+
+                if (defaultButton && defaultPanel) {
+                    defaultButton.classList.add('active');
+                    defaultButton.setAttribute('aria-selected', 'true');
+                    defaultPanel.classList.add('active');
+                }
+            }
+
+
+
+            function updateHash(mainTab, subTab = '') {
+            const hash = subTab ? `#${mainTab}/${subTab}` : `#${mainTab}`;
+            history.pushState(null, '', hash);
+            }
+
+            function handleInitialHash() {
+                const hash = location.hash.replace('#', '');
+                if (!hash) return;
+
+                const [mainTab, subTab] = hash.split('/');
+
+                // Activate main tab
+                const mainButton = document.querySelector(`.tab-button[data-tab="${mainTab}"]`);
+                if (mainButton) mainButton.click();
+
+                // Activate sub-tab if present
+                if (subTab) {
+                    const subButton = document.querySelector(
+                        `#${mainTab} .sub-tab-button[data-sub-tab="${subTab}"]`
+                    );
+                    if (subButton) subButton.click();
+                }
+            }
+
+            window.addEventListener('load', handleInitialHash);
+            window.addEventListener('popstate', handleInitialHash);
+
+            // Activate share-buttons
+            document.querySelectorAll('[data-share]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const url = encodeURIComponent(window.location.href);
+                    const text = encodeURIComponent(document.title);
+                    let shareUrl = '';
+
+                    switch (btn.dataset.share) {
+                        case 'whatsapp':
+                            shareUrl = `https://wa.me/?text=${text}%20${url}`;
+                            break;
+                        case 'twitter':
+                            shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+                            break;
+                        case 'linkedin':
+                            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                            break;
+                        case 'facebook':
+                            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                            break;
+                        case 'copy':
+                            navigator.clipboard.writeText(window.location.href);
+                            break;
+                    }
+
+                    if (shareUrl) {
+                        window.open(shareUrl, '_blank', 'noopener,noreferrer');
+                    }
+                });
+            });
+
+        </script>
+
+</body>
+</html>
