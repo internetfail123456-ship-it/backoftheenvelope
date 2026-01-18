@@ -249,16 +249,16 @@
         </div>
         
         <div class="tab-buttons" role="tablist">
-            <button class="tab-button" data-tab="Tracker" role="tab" aria-selected="false">Tracker</button>
-            <button class="tab-button active" data-tab="Current Affairs" role="tab" aria-selected="true">Current Affairs</button>
-            <button class="tab-button" data-tab="Opinion" role="tab" aria-selected="false">Opinion</button>
+            <button class="tab-button" data-tab="tracker" role="tab" aria-selected="false">Tracker</button>
+            <button class="tab-button active" data-tab="current-affairs" role="tab" aria-selected="true">Current Affairs</button>
+            <button class="tab-button" data-tab="opinion" role="tab" aria-selected="false">Opinion</button>
             <button class="tab-button" data-tab="about" role="tab" aria-selected="false">About</button>
             <!-- Duplicate the line above to add more tabs, e.g.:
             <button class="tab-button" data-tab="new-tab-id" role="tab" aria-selected="false">New Tab Label</button>
             -->
         </div>
 
-            <div id="Tracker" class="tab-panel" role="tabpanel">
+            <div id="tracker" class="tab-panel" role="tabpanel">
                 <!--share buttons-->
             <div class="share-buttons" aria-label="Share this section">
                 <button data-share="whatsapp" aria-label="Share on WhatsApp">
@@ -428,7 +428,7 @@
                     </div>
 
             
-            <div id="Current Affairs" class="tab-panel active" role="tabpanel"><br>
+            <div id="current-affairs" class="tab-panel active" role="tabpanel" data-tab="current-affairs"><br>
                 <div class="sub-tab-buttons">
                     <button class="sub-tab-button active" data-sub-tab="UB2026" role="sub-tab" aria-selected="true">Union Budget 2026</button>
                     <button class="sub-tab-button" data-sub-tab="T2026" role="sub-tab" aria-selected="false">2026 Trends</button>
@@ -608,7 +608,7 @@
 
             </div>
             
-            <div id="Opinion" class="tab-panel" role="tabpanel"><br>
+            <div id="opinion" class="tab-panel" role="tabpanel" data-tab="opinion"><br>
                 <div class="sub-tab-buttons">
                 <button class="sub-tab-button active" data-sub-tab="Der" role="sub-tab" aria-selected="true">Derivatives</button>
                 <button class="sub-tab-button" data-sub-tab="Phrm" role="sub-tab" aria-selected="false">Pharmaceuticals</button>
@@ -864,18 +864,12 @@
                     button.setAttribute('aria-selected', 'true');
 
                     const panel = document.getElementById(tabId);
-                    panel.classList.add('active');
+                    if (!panel) return;
 
+                    panel.classList.add('active');
                     updateHash(tabId);
 
-                    /* 🔁 RESET SUB-TABS WHEN ENTERING ABOUT */
-                    if (tabId === 'Current Affairs') {
-                        resetAboutSubTabs(panel);
-                    }
-
-                    if (tabId === 'Opinion') {
-                        resetAboutSubTabs(panel);
-                    }
+                    resetSubTabs(panel);
                 });
             });
 
@@ -885,6 +879,8 @@
                     const subTabId = button.dataset.subTab;
                     const container = button.closest('.tab-panel');
                     if (!container) return;
+
+                    const mainTab = container.dataset.tab;
 
                     container.querySelectorAll('.sub-tab-button').forEach(b => {
                         b.classList.remove('active');
@@ -898,22 +894,23 @@
                     button.classList.add('active');
                     button.setAttribute('aria-selected', 'true');
 
-                    updateHash(container, subTabId);
+                    updateHash(mainTab, subTabId);
 
                     const panel = container.querySelector(`#${subTabId}`);
                     if (panel) panel.classList.add('active');
                 });
             });
 
-            /* ---------- DEFAULT ABOUT STATE ---------- */
-            function resetAboutSubTabs(container) {
-                if(container='Current Affairs')
-                {const defaultButton = container.querySelector('.sub-tab-button[data-sub-tab="UB2026"]');
-                const defaultPanel  = container.querySelector('#UB2026');}
+            /* ---------- DEFAULT SUB-TABS ---------- */
+            function resetSubTabs(container) {
+                const mainTab = container.dataset.tab;
+                let defaultSubTab = null;
 
-                if(container='Opinion')
-                {const defaultButton = container.querySelector('.sub-tab-button[data-sub-tab="Der"]');
-                const defaultPanel  = container.querySelector('#Der');}
+                if (mainTab === 'current-affairs') {
+                    defaultSubTab = 'UB2026';
+                } else if (mainTab === 'opinion') {
+                    defaultSubTab = 'Der';
+                }
 
                 container.querySelectorAll('.sub-tab-button').forEach(b => {
                     b.classList.remove('active');
@@ -924,34 +921,48 @@
                     p.classList.remove('active');
                 });
 
-                if (defaultButton && defaultPanel) {
-                    defaultButton.classList.add('active');
-                    defaultButton.setAttribute('aria-selected', 'true');
-                    defaultPanel.classList.add('active');
+                if (defaultSubTab) {
+                    const defaultButton = container.querySelector(
+                        `.sub-tab-button[data-sub-tab="${defaultSubTab}"]`
+                    );
+                    const defaultPanel = container.querySelector(`#${defaultSubTab}`);
+
+                    if (defaultButton && defaultPanel) {
+                        defaultButton.classList.add('active');
+                        defaultButton.setAttribute('aria-selected', 'true');
+                        defaultPanel.classList.add('active');
+                    }
                 }
             }
 
-
-
+            /* ---------- HASH ---------- */
             function updateHash(mainTab, subTab = '') {
-            const hash = subTab ? `#${mainTab}/${subTab}` : `#${mainTab}`;
-            history.pushState(null, '', hash);
+                const hash = subTab
+                    ? `#${mainTab}/${subTab}`
+                    : `#${mainTab}`;
+                history.pushState(null, '', hash);
             }
 
+            /* ---------- INITIAL LOAD ---------- */
             function handleInitialHash() {
                 const hash = location.hash.replace('#', '');
                 if (!hash) return;
 
                 const [mainTab, subTab] = hash.split('/');
 
-                // Activate main tab
-                const mainButton = document.querySelector(`.tab-button[data-tab="${mainTab}"]`);
+                const mainButton = document.querySelector(
+                    `.tab-button[data-tab="${mainTab}"]`
+                );
                 if (mainButton) mainButton.click();
 
-                // Activate sub-tab if present
                 if (subTab) {
-                    const subButton = document.querySelector(
-                        `#${mainTab} .sub-tab-button[data-sub-tab="${subTab}"]`
+                    const container = document.querySelector(
+                        `.tab-panel[data-tab="${mainTab}"]`
+                    );
+                    if (!container) return;
+
+                    const subButton = container.querySelector(
+                        `.sub-tab-button[data-sub-tab="${subTab}"]`
                     );
                     if (subButton) subButton.click();
                 }
@@ -960,7 +971,7 @@
             window.addEventListener('load', handleInitialHash);
             window.addEventListener('popstate', handleInitialHash);
 
-            // Activate share-buttons
+                // Activate share-buttons
             document.querySelectorAll('[data-share]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const url = encodeURIComponent(window.location.href);
